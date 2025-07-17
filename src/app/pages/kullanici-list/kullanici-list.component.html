@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Kullanıcı Listesi</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+
+<body>
+  <div *ngIf="uyariMesaji" class="toast-notification shadow" role="alert" aria-live="assertive" aria-atomic="true">
+    {{ uyariMesaji }}
+  </div>
+  <div *ngIf="gosterCikisOnayKutusu" class="onay-kutusu shadow rounded p-4 bg-white text-center">
+    <p class="fw-bold mb-3">Çıkış yapmak istediğinize emin misiniz?</p>
+    <button class="btn btn-danger me-2" (click)="OnaylaCikis()">Evet</button>
+    <button class="btn btn-secondary" (click)="VazgecCikis()">Hayır</button>
+  </div>
+  <div *ngIf="gosterSilOnayKutusu" class="onay-kutusu shadow rounded p-4 bg-white text-center">
+    <p class="fw-bold mb-3">Kullanıcı silmek istediğinize emin misiniz?</p>
+    <button class="btn btn-danger me-2" (click)="OnaylaSil()">Evet</button>
+    <button class="btn btn-secondary" (click)="VazgecSil()">Hayır</button>
+  </div>
+  <nav class="navbar navbar-expand-lg" style="background-color: rgb(187, 181, 181);">
+    <div class="container-fluid">
+      <a class="navbar-brand fw-bold" href="#">Kullanıcı Listesi</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item px-2">
+            <a class="nav-link" (click)="LogIslemleri($event)">Log İşlemleri</a>
+          </li>
+          <li class="nav-item px-2">
+            <a class="nav-link active disabled-link">Kullanıcı İşlemleri</a>
+          </li>
+          <li class="nav-item px-2">
+            <a class="nav-link" (click)="MevcutTasinmazlarListesi($event)">Mevcut Taşınmazlar Listesi</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <div class="d-flex justify-content-end mt-3 me-3">
+    <button type="button" class="btn btn-danger btn-sm" (click)="Cikis($event)">
+      <i class="fa fa-sign-out-alt me-1"></i> Çıkış
+    </button>
+  </div>
+  <form [formGroup]="form">
+    <div class="container-fluid top-bar mt-3 p-3 bg-light rounded shadow-sm">
+      <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+        <div class="d-flex flex-wrap gap-2 flex-grow-1 justify-content-center align-items-end">
+          <div class="form-group">
+            <label class="form-label">Ad</label>
+            <select class="form-select form-select-sm" formControlName="kullaniciAd">
+              <option value="">Tümü</option>
+              <option *ngFor="let ad of kullaniciAdList" [value]="ad">{{ ad }}</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Soyad</label>
+            <select class="form-select form-select-sm" formControlName="kullaniciSoyad">
+              <option value="">Tümü</option>
+              <option *ngFor="let soyad of kullaniciSoyadList" [value]="soyad">{{ soyad }}</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email</label>
+            <select class="form-select form-select-sm" formControlName="eMail">
+              <option value="">Tümü</option>
+              <option *ngFor="let mail of eMailList" [value]="mail">{{ mail }}</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Rol</label>
+            <select class="form-select form-select-sm" formControlName="rol">
+              <option value="">Tümü</option>
+              <option *ngFor="let rol of rolList" [value]="rol">{{ rol }}</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Adres</label>
+            <select class="form-select form-select-sm" formControlName="adres">
+              <option value="">Tümü</option>
+              <option *ngFor="let adres of adresList" [value]="adres">{{ adres }}</option>
+            </select>
+          </div>
+        </div>
+        <div class="d-flex gap-2">
+          <button type="button" class="btn btn-secondary btn-sm" (click)="Temizle($event)">
+            <i class="fa fa-eraser me-1"></i> Temizle
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+  <div class="table-wrapper mt-4">
+    <table class="table table-bordered">
+      <thead class="table-light">
+        <tr>
+          <th></th>
+          <th>Ad</th>
+          <th>Soyad</th>
+          <th>E Mail</th>
+          <th>Rol</th>
+          <th>Adres</th>
+        </tr>
+      </thead>
+      <tbody id="kullanici-body">
+        <tr *ngFor="let t of kullanicilar">
+          <td><input type="checkbox" [(ngModel)]="t.selected" /></td>
+          <td>{{ t.kullaniciAd }}</td>
+          <td>{{ t.kullaniciSoyad }}</td>
+          <td>{{ t.eMail }}</td>
+          <td>{{ t.rol }}</td>
+          <td>{{ t.adres }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <nav *ngIf="totalCount > pageSize" aria-label="Sayfalama" class="mt-3">
+    <ul class="pagination justify-content-center">
+      <li class="page-item" [class.disabled]="currentPage === 1">
+        <button class="page-link" (click)="SayfaDegistir(currentPage - 1)">‹</button>
+      </li>
+      <li class="page-item" *ngFor="let sayfa of [].constructor(ToplamSayfa()); let i = index"
+        [class.active]="currentPage === i + 1">
+        <button class="page-link" (click)="SayfaDegistir(i + 1)">{{ i + 1 }}</button>
+      </li>
+      <li class="page-item" [class.disabled]="currentPage === ToplamSayfa()">
+        <button class="page-link" (click)="SayfaDegistir(currentPage + 1)">›</button>
+      </li>
+    </ul>
+  </nav>
+  <div class="d-flex justify-content-center gap-3 mt-4 action-buttons">
+    <button class="btn btn-dark square-btn" (click)="Ekle($event)">
+      <i class="fa fa-plus me-2"></i> Ekle
+    </button>
+    <button class="btn btn-dark square-btn" (click)="Guncelle($event)">
+      <i class="fa fa-refresh me-2"></i> Güncelle
+    </button>
+    <button class="btn btn-dark square-btn" (click)="Sil($event)">
+      <i class="fa fa-trash me-2"></i> Sil
+    </button>
+    <button class="btn btn-dark square-btn" (click)="Raporla($event)">
+      <i class="fa fa-file-alt me-2"></i> Raporla
+    </button>
+  </div>
+</body>
+
+</html>

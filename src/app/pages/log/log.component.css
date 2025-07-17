@@ -1,0 +1,153 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(to bottom, #f5f1f3, #d892b8);
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.nav-link {
+  cursor: pointer;
+  color: white !important;
+}
+
+.nav-item {
+  background-color: #6c757d;
+  border-radius: 10px;
+  margin-left: 5px;
+}
+
+.table-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+}
+
+.table {
+  table-layout: fixed;
+  width: 90%;
+  max-width: 1100px;
+  margin: 0 auto;
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.table th:nth-child(1),
+.table td:nth-child(1) {
+  width: 40px;
+}
+
+.table th:nth-child(2),
+.table td:nth-child(2),
+.table th:nth-child(3),
+.table td:nth-child(3),
+.table th:nth-child(4),
+.table td:nth-child(4) {
+  width: 100px;
+}
+
+.table th:nth-child(5),
+.table td:nth-child(5),
+.table th:nth-child(6),
+.table td:nth-child(6) {
+  width: 80px;
+}
+
+.table th:nth-child(7),
+.table td:nth-child(7) {
+  width: 130px;
+}
+
+.table th:nth-child(8),
+.table td:nth-child(8) {
+  width: 200px;
+}
+
+.table th:nth-child(9),
+.table td:nth-child(9) {
+  width: 180px;
+}
+
+.table td {
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  word-wrap: break-word;
+  word-break: break-word;
+}
+
+.table tbody tr {
+  height: 55px;
+}
+
+tr:last-child td {
+  border-bottom: none;
+}
+
+.pagination .page-link {
+  border-radius: 50px !important;
+  margin: 0 3px;
+}
+
+.top-bar {
+  margin-top: 60px;
+  padding: 0 20px;
+}
+
+.btn-close-custom {
+  background-color: black;
+  color: white;
+  border-radius: 30px;
+  padding: 6px 10px;
+}
+
+form {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+form .container-fluid {
+  max-width: 1000px;
+  width: 100%;
+  background-color: #f8f9fa;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.form-group {
+  min-width: 150px;
+  max-width: 180px;
+  flex: 1 1 160px;
+  text-align: left;
+}
+
+.form-group select {
+  width: 100%;
+}
+
+.form-label {
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.d-flex.flex-wrap {
+  row-gap: 12px;
+  column-gap: 16px;
+  justify-content: center;
+}

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Kullanıcı Ekle</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+
+<body>
+  <div *ngIf="uyariMesaji" class="toast-notification shadow" role="alert" aria-live="assertive" aria-atomic="true">
+    {{ uyariMesaji }}
+  </div>
+  <div *ngIf="gosterOnayKutusu" class="onay-kutusu shadow rounded p-4 bg-white text-center" role="dialog"
+    aria-modal="true" aria-labelledby="onayBaslik">
+    <p id="onayBaslik" class="fw-bold mb-3">Kullanıcı eklemek istediğinize emin misiniz?</p>
+    <button type="button" class="btn btn-danger me-2" (click)="Onayla()" aria-label="Evet, kullanıcı ekle">Evet</button>
+    <button type="button" class="btn btn-secondary" (click)="Vazgec()" aria-label="Hayır, vazgeç">Hayır</button>
+  </div>
+  <div *ngIf="gosterCikisOnayKutusu" class="onay-kutusu shadow rounded p-4 bg-white text-center" role="dialog"
+    aria-modal="true" aria-labelledby="cikisBaslik">
+    <p id="cikisBaslik" class="fw-bold mb-3">Çıkış yapmak istediğinize emin misiniz?</p>
+    <button type="button" class="btn btn-danger me-2" (click)="OnaylaCikis()" aria-label="Evet, çıkış yap">Evet</button>
+    <button type="button" class="btn btn-secondary" (click)="VazgecCikis()" aria-label="Hayır, vazgeç">Hayır</button>
+  </div>
+  <nav class="navbar navbar-expand-lg" style="background-color: rgb(187, 181, 181);">
+    <div class="container-fluid">
+      <a class="navbar-brand fw-bold" href="#" aria-current="page">Kullanıcı Ekle</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Menüyü aç veya kapat">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item px-2">
+            <a class="nav-link" (click)="LogIslemleri($event)" role="button" tabindex="0">Log İşlemleri</a>
+          </li>
+          <li class="nav-item px-2">
+            <a class="nav-link active disabled-link" (click)="KullaniciIslemleri($event)" role="button" tabindex="0"
+              aria-current="page">Kullanıcı İşlemleri</a>
+          </li>
+          <li class="nav-item px-2">
+            <a class="nav-link" (click)="MevcutTasinmazlar($event)" role="button" tabindex="0">Mevcut Taşınmazlar
+              Listesi</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <div class="d-flex justify-content-end mt-3 me-3">
+    <button type="button" class="btn btn-danger btn-sm" (click)="Cikis($event)" aria-label="Çıkış yap">
+      <i class="fa fa-sign-out-alt me-1" aria-hidden="true"></i> Çıkış
+    </button>
+  </div>
+  <div class="container mt-4">
+    <form [formGroup]="form" (ngSubmit)="KullaniciEkle()">
+      <div class="row justify-content-center">
+        <div class="col-md-6">
+          <div class="form-group mb-3 d-flex align-items-center">
+            <i class="fa fa-user form-icon me-2" aria-hidden="true"></i>
+            <input type="text" formControlName="kullaniciAd" class="form-control" placeholder="Ad"
+              aria-label="Kullanıcı Adı" />
+          </div>
+          <div class="form-group mb-3 d-flex align-items-center">
+            <i class="fa fa-user form-icon me-2" aria-hidden="true"></i>
+            <input type="text" formControlName="kullaniciSoyad" class="form-control" placeholder="Soyad"
+              aria-label="Kullanıcı Soyadı" />
+          </div>
+          <div class="form-group mb-3 d-flex align-items-center">
+            <i class="fa fa-envelope form-icon me-2" aria-hidden="true"></i>
+            <input type="email" formControlName="eMail" class="form-control" placeholder="E-mail"
+              aria-label="E-posta Adresi" />
+          </div>
+          <div class="form-group mb-3 d-flex align-items-center">
+            <i class="fa fa-lock form-icon me-2" aria-hidden="true"></i>
+            <input type="password" formControlName="parola" class="form-control" placeholder="Parola"
+              aria-label="Parola" />
+          </div>
+          <small class="form-text text-muted ms-4">
+            En az 8 karakter, 1 harf, 1 rakam ve 1 özel karakter (&#64;$!%*?&) içermelidir.
+          </small>
+          <div class="form-group mb-3 d-flex align-items-center">
+            <i class="fa fa-user-tag form-icon me-2" aria-hidden="true"></i>
+            <select formControlName="rol" class="form-control" aria-label="Rol Seçiniz">
+              <option [ngValue]="null" disabled selected>Rol Seçiniz</option>
+              <option value="Admin">Admin</option>
+              <option value="Kullanici">Kullanici</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group mb-3 d-flex align-items-center">
+            <i class="fa fa-map form-icon mt-2" aria-hidden="true"></i>
+            <textarea formControlName="adres" class="form-control" rows="3" placeholder="Adres"
+              aria-label="Adres"></textarea>
+          </div>
+          <div class="text-end mt-3">
+            <button type="button" class="btn btn-success" (click)="EklemeIstegiGeldi()" aria-label="Kaydet ve ekle">
+              <i class="fa fa-plus" aria-hidden="true"></i> Kaydet
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</body>
+
+</html>
